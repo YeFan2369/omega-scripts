@@ -5,7 +5,7 @@
   	bool freecam_active = false;
 	bool verify_admins = false; // true=verify presence of BI UID in admin list
 	string cmd_prefix = "/"; // Must be special character
-	ref TStringArray admins = {}; // Add your BI UID or SteamID
+	ref TStringArray admins = {""}; // Add your BI UID or SteamID
 
 	bool IsPlayerAnAdmin(PlayerBase player) {
 		bool found = false;
