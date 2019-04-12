@@ -18,65 +18,45 @@
 /spawn 物品名称  
 ~刷东西在脚边，在DayZServer\mpmissions\dayzOffline.chernarusplus\db\types.xml文件中有DayZ定义的所有物品名称
 
-/inv 物品名称
-~把东西刷到你的背包里
+/inv 物品名称//////////////////////////////////////////////////////把东西刷到你的背包里
 
-/gun 枪名
-~刷一把能满配吃鸡的枪到你手上，枪名：upm/cz75/mak/cz61/mp5/svd/mp133/mosin/m4/fal/akm/sks/izh18/m70/cz527/fnx
+/gun 枪名////////////////////////////////////////刷一把能满配吃鸡的枪到你手上，枪名：upm/cz75/mak/cz61/mp5/svd/mp133/mosin/m4/fal/akm/sks/izh18/m70/cz527/fnx
 
-/tp 地点
-~传送到预设好的地点，地点名：nwaf/nwaf_tents/tisy/vmc/pmc/tmc/
+/tp 地点//////////////////////////////////////////传送到预设好的地点，地点名：nwaf/nwaf_tents/tisy/vmc/pmc/tmc/
 
-/strip 玩家名
-~清空玩家身上的所有东西
+/strip 玩家名     ////////////////////////////////////////清空玩家身上的所有东西
 
-/slap 玩家名
-~管理员传送到玩家身边
+/slap 玩家名    /////////////////////////////////////////管理员传送到玩家身边
 
-/topos 坐标x 坐标y 玩家名字
-~把玩家传送到坐标地点
+/topos 坐标x 坐标y 玩家名字      ///////////////////////////把玩家传送到坐标地点
 
-/goto 玩家名
-~同上
+/goto 玩家名      ////////////////////////////////同上
 
-/allgoto
-~把所有玩家传送到一个玩家旁边
+/allgoto                 //////////////////////////////把所有玩家传送到一个玩家旁边
 
-/here 玩家名
-~把玩家传送到管理员身边
+/here 玩家名             /////////////////////把玩家传送到管理员身边
 
-/allhere
-~把所有玩家传送到管理员身边周围开会
+/allhere                 //////////////////////////////////////把所有玩家传送到管理员身边周围开会
 
-/time 小时 分钟
-~改变服务器的当前时间
+/time 小时 分钟      /////////////////////////////////////改变服务器的当前时间
 
-/day
-~变成白天
+/day         ////////////////////////////////////变成白天
 
-/night
-~变成晚上
+/night        ////////////////////////////////////变成晚上
 
-/kill 玩家名
-~杀掉玩家
+/kill 玩家名    //////////////////////////////////// 杀掉玩家
 
-/killall
-~集体死亡
+/killall        ////////////////////////////////////集体死亡
 
-/heal 玩家名
-~治疗玩家
+/heal 玩家名        ////////////////////////////////////治疗玩家
 
-/freecam
-~自由镜头
+/freecam        ////////////////////////////////////自由镜头
 
-/offroad
-~刷辆毛子的拉达（滑稽）
+/offroad        ////////////////////////////////////刷辆毛子的拉达（滑稽）
 
-/sedan
-~轿车
+/sedan        ////////////////////////////////////轿车
 
-/refuel
-~给身边的车加油水箱加满水
+/refuel        ////////////////////////////////////给身边的车加油水箱加满水
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 This is a code to replace the DayZServer\mpmissions\dayzOffline.chernarusplus\init.c file.
@@ -96,65 +76,44 @@ Instructions:
 Enter the game, connect to the server, press T, enter the administrator password use the #login adminpassword(adminpassword in the third line of the serverDZ.cfg file passwordAdmin = ""; if there is no content between the double quotes, then add the content between the double quotes Is the password of the server administrator)
 Now you can enter the admin command in the chat window.
 Press T to open the chat window and enter:
-/spawn itemname
-~ spawn item at the your position, all the item names defined by DayZ in the DayZServer\mpmissions\dayzOffline.chernarusplus\db\types.xml file
+/spawn itemname        ////////////////////////////////////spawn item at the your position, all the item names defined by DayZ in the DayZServer\mpmissions\dayzOffline.chernarusplus\db\types.xml file
 
-/inv itemname
-~ spawn item  into your inventory
+/inv itemname        ////////////////////////////////////spawn item  into your inventory
 
-/gun gunname
-~ give a weapon that can be winner winner chicken dinner to your hand XD. Gun name: upm/cz75/mak/cz61/mp5/svd/mp133/mosin/m4/fal/akm/sks/izh18/m70/cz527/fnx
+/gun gunname        ////////////////////////////////////give a weapon that can be winner winner chicken dinner to your hand XD. Gun name: upm/cz75/mak/cz61/mp5/svd/mp133/mosin/m4/fal/akm/sks/izh18/m70/cz527/fnx
 
-/tp location
-~ Transfer to the preset location, location name: nwaf/nwaf_tents/tisy/vmc/pmc/tmc/
+/tp location        ////////////////////////////////////Transfer to the preset location, location name: nwaf/nwaf_tents/tisy/vmc/pmc/tmc/
 
-/strip playername
-~ Empty everything on the player
+/strip playername        ////////////////////////////////////Empty everything on the player
 
-/slap playername
-~ sent Administrator to the player
+/slap playername        ////////////////////////////////////sent Administrator to the player
 
-/topos coordinateX coordinateY playername
-~ Transfer the player to the coordinate location
+/topos coordinateX coordinateY playername        ////////////////////////////////////teleport the player to the coordinate location
 
-/goto playername
-~ Same as above
+/goto playername        ////////////////////////////////////Same as above
 
-/allgoto playername
-~ Transfer all players to a player
+/allgoto playername        ////////////////////////////////////Transfer all players to a player
 
-/here playername
-~ Transfer the player to the administrator
+/here playername        ////////////////////////////////////Transfer the player to the administrator
 
-/allhere
-~ Transfer all players to the meeting around the administrator
+/allhere        ////////////////////////////////////Transfer all players to the meeting around the administrator
 
-/time hours minutes
-~Change the current time of the server
+/time hours minutes        ////////////////////////////////////Change the current time of the server
 
-/day
-~ Become daytime
+/day        ////////////////////////////////////Become daytime
 
-/night
-~ Become night
+/night        ////////////////////////////////////Become night
 
-/kill playername
-~kill the player
+/kill playername        ////////////////////////////////////kill the player
 
-/killall
-~ collective death
+/killall        ////////////////////////////////////collective death
 
-/heal playername
-~Treat players
+/heal playername        ////////////////////////////////////Treat players
 
-/freecam
-~free lens
+/freecam        ////////////////////////////////////free lens
 
-/offroad
-~ Lada (LOL) spawn the soviet Lada
+/offroad        ////////////////////////////////////Lada (LOL) spawn the soviet Lada
 
-/sedan
-~ car
+/sedan        ////////////////////////////////////car
 
-/refuel
-~ Fill the radiator adn tank of your car around you
+/refuel        ////////////////////////////////////Fill the radiator adn tank of your car around you
