@@ -1,11 +1,51 @@
-  /*
-    Place in init.c -> CustomMission
-  */
-  
-  	bool freecam_active = false;
-	bool verify_admins = false; // true=verify presence of BI UID in admin list
-	string cmd_prefix = "/"; // Must be special character
-	ref TStringArray admins = {""}; // Add your BI UID or SteamID
+
+void main()
+{
+	//INIT WEATHER BEFORE ECONOMY INIT------------------------在引擎初始化中央经济系统前先初始化天气
+	Weather weather = g_Game.GetWeather();
+
+	weather.MissionWeather(false);    // false = use weather controller from Weather.c  天气控制器在Weather.c这个文件里
+
+	weather.GetOvercast().Set( Math.RandomFloatInclusive(0.4, 0.6), 1, 0);
+	weather.GetRain().Set( 0, 0, 1);
+	weather.GetFog().Set( Math.RandomFloatInclusive(0.05, 0.1), 1, 0);
+
+	//INIT ECONOMY--------------------------------------初始化中央经济系统
+	Hive ce = CreateHive();
+	if ( ce )
+		ce.InitOffline();
+
+	//DATE RESET AFTER ECONOMY INIT-------------------------在中央经济系统初始化后重设日期
+	int year, month, day, hour, minute;
+	int reset_month = 9, reset_day = 20;
+	GetGame().GetWorld().GetDate(year, month, day, hour, minute);
+
+    if ((month == reset_month) && (day < reset_day))
+    {
+        GetGame().GetWorld().SetDate(year, reset_month, reset_day, hour, minute);
+    }
+    else
+    {
+        if ((month == reset_month + 1) && (day > reset_day))
+        {
+            GetGame().GetWorld().SetDate(year, reset_month, reset_day, hour, minute);
+        }
+        else
+        {
+            if ((month < reset_month) || (month > reset_month + 1))
+            {
+                GetGame().GetWorld().SetDate(year, reset_month, reset_day, hour, minute);
+            }
+        }
+    }
+}
+
+class CustomMission: MissionServer
+{	
+	bool freecam_active = false;
+	bool verify_admins = false; // true=verify presence of BI UID in admin list 等于true的话要会从服务器管理员列表里读取
+	string cmd_prefix = "/"; // Must be special character 这里必须是一个特殊字符，具体为啥不知道，跟波黑的引擎有关
+	ref TStringArray admins = {"76561198096614143"}; // Add your BI UID or SteamID 双引号内替换为你的steam64位ID
 
 	bool IsPlayerAnAdmin(PlayerBase player) {
 		bool found = false;
@@ -79,19 +119,53 @@
 				break;
 			}
 
-			case "weapon": {
+			/////////weapons give full attachments//////////武器基本上都改成了满配
+			case "gun": {
 				if(count != 2) { SendMessageToPlayer(player, "/weapon [weapon]"); return; }
 				EntityAI weapon;
 				switch(tokens[1]) {
 					case "ump": {
 						weapon = player.GetHumanInventory().CreateInHands("UMP45");
-						player.GetInventory().CreateInInventory("Mag_UMP_25Rnd");
+						weapon.GetInventory().CreateAttachment("BUISOptic");
+						weapon.GetInventory().CreateAttachment("UniversalLight");
+						weapon.GetInventory().CreateAttachment("PistolSuppressor");
+						player.GetInventory().CreateInInventory("Battery9V");
+						for(i = 0; i < 5; i++) //give more magzine XD  多给点弹匣，原作者这里只给了一个弹匣，1.02的僵尸猛得一匹测试的时候完全不够打
+						{
+							player.GetInventory().CreateInInventory("Mag_UMP_25Rnd");
+						}
+						break;
+					}
+
+					case "cz75":{
+						weapon = player.GetHumanInventory().CreateInHands("CZ75");
+						weapon.GetInventory().CreateAttachment("TLRLight"); 
+						weapon.GetInventory().CreateAttachment("PistolSuppressor");
+						weapon.GetInventory().CreateAttachment("FNP45_MRDSOptic");
+						for( i = 0; i < 5; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_CZ75_15Rnd");
+						}
+						break;
+					}
+
+					case "mak":{
+						weapon = player.GetHumanInventory().CreateInHands("MakarovIJ70");
+						weapon.GetInventory().CreateAttachment("PistolSuppressor");
+						for( i = 0; i < 5; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_IJ70_8Rnd");
+						}
 						break;
 					}
 
 					case "cz61": {
 						weapon = player.GetHumanInventory().CreateInHands("CZ61");
-						player.GetInventory().CreateInInventory("Mag_CZ61_20Rnd");
+						weapon.GetInventory().CreateAttachment("AK_Suppressor"); 
+						for(i = 0;i < 5; i++) 
+						{
+							player.GetInventory().CreateInInventory("Mag_CZ61_20Rnd");
+						}
 						break;
 					}
 
@@ -99,44 +173,94 @@
 						weapon = player.GetHumanInventory().CreateInHands("MP5K");
 						weapon.GetInventory().CreateAttachment("MP5k_StockBttstck");
 						weapon.GetInventory().CreateAttachment("MP5_PRailHndgrd");
-						player.GetInventory().CreateInInventory("Mag_MP5_30Rnd");
+						weapon.GetInventory().CreateAttachment("UniversalLight");
+						weapon.GetInventory().CreateAttachment("BUISOptic");
+						weapon.GetInventory().CreateAttachment("PistolSuppressor");
+						for( i = 0; i < 5; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_MP5_30Rnd");
+						}
 						break;
 					}
 
 					case "svd": {
 						weapon = player.GetHumanInventory().CreateInHands("SVD");
 						weapon.GetInventory().CreateAttachment("PSO11Optic");
-						player.GetInventory().CreateInInventory("Mag_SVD_10Rnd");
+						for( i = 0; i < 5; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_SVD_10Rnd");
+						}
 						break;
 					}
 
 					case "mp133": {
 						weapon = player.GetHumanInventory().CreateInHands("Mp133Shotgun");
-						player.GetInventory().CreateInInventory("Ammo_12gaPellets");
+						weapon.GetInventory().CreateAttachment("FNP45_MRDSOptic");
+						for( i = 0; i < 4; i++)
+						{
+							player.GetInventory().CreateInInventory("Ammo_12gaPellets");
+							player.GetInventory().CreateInInventory("Ammo_12gaSlug");
+						}
 						break;
 					}
 
 					case "mosin": {
 						weapon = player.GetHumanInventory().CreateInHands("Mosin9130");
 						weapon.GetInventory().CreateAttachment("PUScopeOptic");
-						player.GetInventory().CreateInInventory("Ammo_762x54");
+						weapon.GetInventory().CreateAttachment("Mosin_Compensator");
+						for( i = 0; i < 2; i++)
+						{
+							player.GetInventory().CreateInInventory("Ammo_762x54");
+						}
 						break;
 					}
 
 					case "m4": {
-						weapon = player.GetHumanInventory().CreateInHands("M4A1_Black");
-						weapon.GetInventory().CreateAttachment("M4_RISHndgrd_Black");
-						weapon.GetInventory().CreateAttachment("M4_MPBttstck_Black");
+						weapon = player.GetHumanInventory().CreateInHands("M4A1");
+						weapon.GetInventory().CreateAttachment("M4_RISHndgrd");
+						weapon.GetInventory().CreateAttachment("M4_MPBttstck");
 						weapon.GetInventory().CreateAttachment("BUISOptic");
-						player.GetInventory().CreateInInventory("Mag_STANAGCoupled_30Rnd");
+						weapon.GetInventory().CreateAttachment("M4_Suppressor");
+						for( i = 0; i < 7; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_STANAG_30Rnd");
+						}
+						break;
+					}
+
+					case "fal": {
+						weapon = player.GetHumanInventory().CreateInHands("FAL");
+						weapon.GetInventory().CreateAttachment("Fal_FoldingBttstck");
+						weapon.GetInventory().CreateAttachment("M68Optic");
+						player.GetInventory().CreateInInventory("Battery9V");
+						for( i = 0; i < 7; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_FAL_20Rnd");
+						}
 						break;
 					}
 
 					case "akm": {
 						weapon = player.GetHumanInventory().CreateInHands("AKM");
 						weapon.GetInventory().CreateAttachment("AK_RailHndgrd");
+						weapon.GetInventory().CreateAttachment("AK_Suppressor");
 						weapon.GetInventory().CreateAttachment("AK_PlasticBttstck");
-						player.GetInventory().CreateInInventory("Mag_AKM_30Rnd");
+						weapon.GetInventory().CreateAttachment("KashtanOptic");
+						weapon.GetInventory().CreateAttachment("UniversalLight");
+						for( i = 0; i < 7; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_AKM_30Rnd");
+						}
+						break;
+					}
+
+					case "SKS":{
+						weapon = player.GetHumanInventory().CreateInHands("SKS");
+						weapon.GetInventory().CreateAttachment("PUScopeOptic");
+						for( i = 0; i < 7; i++)
+						{
+							player.GetInventory().CreateInInventory("Ammo_762x39");
+						}
 						break;
 					}
 
@@ -146,9 +270,35 @@
 						break;
 					}
 
+					case "m70":{
+						weapon = player.GetHumanInventory().CreateInHands("Winchester70");
+						weapon.GetInventory().CreateAttachment("HuntingOptic");
+						for( i = 0; i < 4; i++)
+						{
+							player.GetInventory().CreateInInventory("Ammo_308Win");
+						}
+						break;
+					}
+
+					case "cz527":{
+						weapon = player.GetHumanInventory().CreateInHands("CZ527");
+						weapon.GetInventory().CreateAttachment("HuntingOptic");
+						for( i = 0; i < 7; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_CZ527_5rnd");
+						}
+						break;
+					}
+
 					case "fnx": {
 						weapon = player.GetHumanInventory().CreateInHands("FNX45");
-						player.GetInventory().CreateInInventory("Mag_FNX45_15Rnd");
+						weapon.GetInventory().CreateAttachment("FNP45_MRDSOptic");
+						weapon.GetInventory().CreateAttachment("TLRLight"); 
+						weapon.GetInventory().CreateAttachment("PistolSuppressor");
+						for( i = 0; i < 4; i++)
+						{
+							player.GetInventory().CreateInInventory("Mag_FNX45_15Rnd");
+						}
 						break;
 					}
 
@@ -335,7 +485,6 @@
 				SendMessageToPlayer(player, "[Weather] You have set Rain to " + tokens[1] + "% ["+rain+"]");
 				break;
 			}
-
 			case "fog": {
 				if(count != 2) { SendMessageToPlayer(player, "/rain [value 0-100]"); return; }
 				float fog = tokens[1].ToFloat() / 100;
@@ -343,7 +492,6 @@
 				SendMessageToPlayer(player, "[Weather] You have set Fog to " + tokens[1] + "% ["+fog+"]");
 				break;
 			}
-
 			case "overcast": {
 				if(count != 2) { SendMessageToPlayer(player, "/rain [value 0-100]"); return; }
 				float overcast = tokens[1].ToFloat() / 100;
@@ -426,6 +574,7 @@
 				v = Car.Cast(GetGame().CreateObject( "OffroadHatchback", player.GetPosition() + posModifier));
 				
 				v.GetInventory().CreateAttachment("SparkPlug");
+				v.GetInventory().CreateAttachment("CarRadiator");
 				v.GetInventory().CreateAttachment("EngineBelt");
 				v.GetInventory().CreateAttachment("CarBattery");
 				v.GetInventory().CreateAttachment("HatchbackHood");
@@ -436,9 +585,38 @@
 				v.GetInventory().CreateAttachment("HatchbackWheel");
 				v.GetInventory().CreateAttachment("HatchbackWheel");
 				v.GetInventory().CreateAttachment("HatchbackWheel"); // spare
+				v.GetInventory().CreateAttachment("HeadlightH7");
+				v.GetInventory().CreateAttachment("HeadlightH7");
 				break;
 			}
-
+			
+			case "sedan": { 
+				SendMessageToPlayer(player, "[sedan] Vehicled spawned");
+				Car sedan;
+				float playerAnglesedan = MiscGameplayFunctions.GetHeadingAngle(player);
+				vector posModifiersedan = Vector(-(3 * Math.Sin(playerAnglesedan)), 0, 3 * Math.Cos(playerAnglesedan));
+				sedan = Car.Cast(GetGame().CreateObject( "CivilianSedan", player.GetPosition() + posModifier));
+				
+				sedan.GetInventory().CreateAttachment("SparkPlug");
+				sedan.GetInventory().CreateAttachment("CarRadiator");
+				sedan.GetInventory().CreateAttachment("EngineBelt");
+				sedan.GetInventory().CreateAttachment("CarBattery");
+				sedan.GetInventory().CreateAttachment("CivSedanWheel");
+				sedan.GetInventory().CreateAttachment("CivSedanWheel");
+				sedan.GetInventory().CreateAttachment("CivSedanWheel");
+				sedan.GetInventory().CreateAttachment("CivSedanWheel");
+				sedan.GetInventory().CreateAttachment("CivSedanWheel"); //sapre 备胎（TianGou）到最后一无所有
+				sedan.GetInventory().CreateAttachment("HeadlightH7");
+				sedan.GetInventory().CreateAttachment("HeadlightH7");
+				sedan.GetInventory().CreateAttachment("CivSedanDoors_Driver");
+				sedan.GetInventory().CreateAttachment("CivSedanDoors_CoDriver");
+				sedan.GetInventory().CreateAttachment("CivSedanDoors_BackLeft");
+				sedan.GetInventory().CreateAttachment("CivSedanDoors_BackRight");
+				sedan.GetInventory().CreateAttachment("CivSedanHood");
+				sedan.GetInventory().CreateAttachment("CivSedanTrunk");
+				break;
+			}
+			
 			case "refuel": {
 				ref array<Object> nearest_objects = new array<Object>;
 				ref array<CargoBase> proxy_cargos = new array<CargoBase>;
@@ -471,3 +649,9 @@
 			}
 		}
 	}
+};
+  
+Mission CreateCustomMission(string path)
+{
+	return new CustomMission();
+}
