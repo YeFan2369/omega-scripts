@@ -45,7 +45,7 @@ class CustomMission: MissionServer
 	bool freecam_active = false;
 	bool verify_admins = false; // true=verify presence of BI UID in admin list 等于true的话要会从服务器管理员列表里读取
 	string cmd_prefix = "/"; // Must be special character 这里必须是一个特殊字符，具体为啥不知道，跟波黑的引擎有关
-	ref TStringArray admins = {"76561198096614143"}; // Add your BI UID or SteamID 双引号内替换为你的steam64位ID
+	ref TStringArray admins = {"1234567890"}; // Add your BI UID or SteamID 双引号内替换为你的steam64位ID
 
 	bool IsPlayerAnAdmin(PlayerBase player) {
 		bool found = false;
